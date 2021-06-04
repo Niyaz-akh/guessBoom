@@ -7,9 +7,16 @@ import java.math.RoundingMode;
 public class BoomServiceImpl implements BoomService {
     // TODO: 02.06.2021 закончить реализацию метода
     @Override
-    public double getMaxAffectedRadius(Boom boom) throws Exception {
-        double overpressureValue = getOverpressureValue(boom, 1);
-        throw new Exception("not implemented");
+    public double getMaxAffectedRadius(Boom boom) {
+        double distance = 0.1;
+        double overpressureValue = getOverpressureValue(boom, distance);
+        while (overpressureValue >= 12.9) {
+            distance += 0.001;
+            overpressureValue = getOverpressureValue(boom,distance);
+        }
+        MathContext mathContext = new MathContext(5, RoundingMode.HALF_UP);
+        BigDecimal roundDistance = new BigDecimal(distance, mathContext);
+        return roundDistance.doubleValue();
     }
 
     @Override
